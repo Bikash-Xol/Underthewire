@@ -1,0 +1,59 @@
+1. Find the user Chris Rogers, and his state as in location. 
+Step1:    > Get-ADUser -filter 'Name -Like "*Rogers*"'                             // this will show the user exist or not with all default properties
+Step2:    > Get-ADUser -filter 'Name -Like "*Rogers*"' -Properties *           // this shows all the available proerties
+Step3:    > Get-ADUser -filter 'Name -Like "*Rogers*"' -Properties state
+
+
+2. View host A record IP address (DNS)
+Find the Domain first. 
+Step1:    > Get-WmiObject win32_computersystem
+Then, Open up DNS Record Table
+Step2:    > Get-DnsServerResourceRecord -ZoneName underthewire.tech                   // Find the IP address for HostName you are looking for
+
+3. Find the number of users in the Cyborg group within Active Directory
+Step1:    > Get-ADGroup -Filter * | Select-Object name                                             		 // Check the Cyborg group is there on the list. This is all the groups we have on AD
+Step2:    > Get-ADGroupMember -Identity 'cyborg' | Select-Object name		   	  	  // This will list name of all the members with in the group 'cyborg' 
+Step3:    > Get-ADGroupMember -Identity 'cyborg' | Select-Object name | Measure-Object	  : Give you the count, number of member
+or Step3 > (Get-ADGroupMember -Identity Cyborg).Count  
+
+4. What is the PowerShell module name with a version number of 8.9.8.9
+> Get-Module -ListAvailable												:Will show all the Modules
+> Get-Module -ListAvailable | Where {$_.Version -Like "*8.9.8.9*"}
+
+5. What is the last name of the user who has logon hours set on their account
+> Get-ADUser -Filter 'logonhours -Like "*"' -Properties logonHours			
+
+6. Decoding base64 code									
+> $file = Get-Content cypher.txt
+> [System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String($file))
+
+7.  Generate list of Startup programs that will start automatically. Autorun program list
+> Get-CimInstance Win32_StartupCommand | select-object name, Command, Location, User | Format-List
+
+8. What is the Internet zone that the picture on the desktop was downloaded from
+
+Step1:    > Get-Item .\1_qs5nwlcl7f_-SwNlQvOrAw.png -Stream *           					// This will show data about stream zone transfer
+Step2:    > Get-Content .\1_qs5nwlcl7f_-SwNlQvOrAw.png -Stream zone.identifier
+                    
+9. What is the first name of the user with the phone number of 876-5309 listed in Active Directory
+> Get-ADUser -Filter 'telephonenumber -like "876-5309"' -Properties telephonenumber
+
+10. What is the description of the Applocker Executable deny policy for ill_be_back.exe 
+> Get-AppLockerPolicy -Effective -Xml  
+
+11. The password for cyborg12 is located in the IIS log. The password is not Mozilla or Opera. Find location and read ISS logs, exclude character Mozilla or Opera
+> Get-Content -Path ..\..\..\inetpub\logs\logfiles\w3svc1\u_ex160413.log | Select-String -NotMatch -Pattern "Mozilla|Opera"
+
+12. The password for cyborg13 is the first four characters of the base64 encoded full path to the file that started the i_heart_robots service  
+Step1:    > $pb = (Get-CimInstance Win32_Service -Filter 'Name = "I_heart_robots"').PathName                                             // Storing the the pathname on variable pb
+Step2:    > [convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes($pb))								// Encode $pb text to Base64
+YwA6AFwAdwBpAG4AZABvAHcAcwBcAHMAeQBzAHQAZQBtADMAMgBcAGMAbQBkAC4AZQB4AGUA
+
+
+13 The password cyborg14 is the number of days the refresh interval is set to for DNS aging for the underthewire.tech zone
+> Get-DnsServerZoneAging -Name underthewire.tech
+
+
+14. The password for cyborg15 is the caption for the DCOM application setting for application ID {59B8AFA0-229E-46D9-B980-DDA2C817EC7E} 
+>      Get-CimInstance Win32_DCOMApplicationSetting | where AppID -Like "*{59B8AFA0-229E-46D9-B980-DDA2C817EC7E}*"
+or >  (Get-WmiObject -Class "Win32_DCOMApplication" -Filter "AppId='{59B8AFA0-229E-46D9-B980-DDA2C817EC7E}'" ).Caption  
