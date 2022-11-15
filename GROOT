@@ -1,0 +1,71 @@
+
+Groot 1. What is the last five alphanumeric characters of the MD5 hash of this system’s hosts file.
+
+> Get-FileHash c:\windows\system32\drivers\etc\hosts -Algorithm MD5 | Format-List
+
+Groot 2. The password for groot3 is the word that is made up from the letters in the range of 1,481,110 to 1,481,117 within the file on the desktop.
+
+> (Get-Content .\elements.txt)[1481110..14811117] -Join ""
+
+Groot 3. The password for groot4 is the number of times the word “beetle” is listed in the file on the desktop.
+
+> (Get-Content .\words.txt | Select-String -Pattern beetle -AllMatches).Matches.Count
+>  Get-Content .\words.txt | Select-String beetle -AllMatches | Select-Object -ExpandProperty matches | measure
+or
+> (get-ChildItem | Get-Content).split (" ") | select-string "beetle" | measure-Object
+
+Groot 4. The password for groot5 is the name of the Drax subkey within the HKEY_CURRENT_USER (HKCU) registry hive.
+
+> Get-childitem hkcu:\ -Recurse | select-string drax
+Or
+> Get-childitem HKCU:\Software\Microsoft\Assistance\Drax
+
+Groot 5. The password for groot6 is the name of the workstation that the user with a username of “baby.groot” can log into as depicted in Active Directory
+
+> Get-ADUser baby.groot -Properties userworkstations
+
+Groot6 . The password for groot7 is the name of the program that is set to start when this user logs in  : Startup programe
+
+> Get-CunInstance win32_StartupCommand
+
+Groot7. The password for groot8 is the name of the dll, as depicted in the registry, associated with the “applockerfltr” service 
+
+> Get-ItemProperty HKLM:\system\currentcontrolset\services\applockerfltr
+
+Groot8. What is the description of the firewall rule blocking MySQL 
+
+> Get-netfirewallrule | where DispllayName -Like "*mysql*"
+
+Groot9. What  is the name of the OU that doesn’t have accidental deletion protection enabled (ADOrganizationalUnit)
+
+> Get-ADOrganizationalUnit -Filter * -Properties * | where {$_.ProtectedFromAccidentalDeletion -eq $false}
+
+Groot10. The password for groot11 is the one word that makes the two files on the desktop different. Compare Files
+
+> Compare-Object -ReferenceObject (gc .\new.txt) -DifferenceObject (gc .\old.txt)
+
+
+Groot11. The password for groot12 is within an alternate data stream (ADS) somewhere on the desktop.
+To locate the available alternate data streams available for a file, you can use the Get-Item cmdlet with the -Stream parameter.  
+
+Step 1-  > Get-Item * -Stream *        
+
+Step 2-  > Get-Item .\TPS_Reports04.pdf | Get-Content -Stream secret    // This is to check what inside the Zone Identifier called 'secret'.
+
+Groot12. The password for groot13 is the owner of the Nine Realms folder on the desktop. Find OWNER Permission
+
+> Get-Acl '.\Nine Realms'
+
+Groot 13. The password for groot14 is the name of the Registered Owner of this system as depicted in the Registry.
+
+> Get-ItemProperty 'HKLM:\Software\microsoft\windows NT\CurrentVersion
+
+
+Groot 14. The password for groot15 is the description of the share whose name contains “task” in it
+
+> Get-SmbShare
+
+
+
+
+
