@@ -1,0 +1,78 @@
+Oracle 1  The password for oracle2 is the timezone in which this system is set to.
+> Get-TimeZone
+
+Oracle 2  The password for oracle3 is the last five digits of the MD5 hash, from the hashes of files on the desktop that appears twice.
+> Get-Filehash * -Algorithm MD5          // see md5 for all files
+
+> Get-ChildItem | Get-FileHash -Algorithm md5 | Sort-Object -Property Hash
+
+Oracle 3. The password for oracle4 is the date that the system logs were last wiped as depicted in the event logs on the desktop.
+
+> Get-WinEvent -Path .\Oracle3_Security.evtx
+
+> Get-WinEvent -Path .\Oracle3_Security.evtx | where id -eq 1102                // we know event id 1102 generate when logs is been deleted
+
+Oracle 4. The password for oracle5 is the name of the GPO that was last created PLUS the name of the file on the user’s desktop.
+
+> Get-GPO -All
+> Get-GPO -All | Select-Object -Property DisplayName, creationtime
+> Get-GPO -All | Select-Object -Property DisplayName, creationtime | Sort-Object -Property creationtime
+
+
+Oracle 5. The password for oracle6 is the name of the GPO that contains a description of “I_AM_GROOT” PLUS the name of the file on the user’s desktop.
+
+> Get-GPO -All | where Description -Like "I_AM_GROOT"
+
+
+Oracle 6. The password for oracle7 is the name of the OU that doesn’t have a GPO linked to it PLUS the name of the file on the user’s desktop.
+
+>  Get-ADOrganizationalUnit -Filter * | where {-Not $_.linkedgrouppolicyobjects}
+
+
+Oracle 7. The password for oracle8 is the name of the domain that a trust is built with PLUS the name of the file on the user’s desktop.
+
+> Get-ADTrust -Filter *
+
+
+Oracle 8 . The password for oracle9 is the name of the file in the GET Request from www.guardian.galaxy.com within the log file on the desktop.
+
+> Get-Content .\logs.txt | Select-String guardian
+
+
+Oracle 9. The password for oracle10 is the computer name of the DNS record of the mail server listed in the UnderTheWire.tech zone PLUS the name of the file on the user’s desktop.
+
+> Get-DnsServerResourceRecord -ZoneName underthewire.tech                         // MX (Mail Exchange) record from DNS Record keep the information about Mail Server.
+
+
+Oracle 10. The password for oracle11 is the .biz site the user has previously navigated to.
+
+> Get-Item 'HKCU:\Software\Microsoft\Internet Explorer\TypedURLs'
+
+
+Oracle 11. The password for oracle12 is the drive letter associated with the mapped drive that this user has.
+
+> Get-PSDrive -PSProvider FileSystem
+OR
+> get-smbmapping
+
+
+Oracle 12. The password for oracle13 is the IP of the system that this user has previously established a remote desktop with.
+
+> Get-childitem 'HKCU:\Software\Microsoft\Terminal Server Client'
+
+
+Oracle 13. The password for oracle14 is the name of the user who created the Galaxy security group as depicted in the event logs on the desktop PLUS the name of the text file on the user’s desktop.
+
+> Get-WinEvent -Path .\security.evtx | Where {$_.message -Like "*group*created*"}
+> Get-WinEvent -Path .\security.evtx | Where {$_.message -Like "*group*created*"} | Select-Object -Property *
+
+
+Oracle 14. The password for oracle15 is the name of the user who added the user Bereet to the Galaxy security group as depicted in the event logs on the desktop PLUS the name of the text file on the user’s desktop.
+
+> Get-WinEvent -Path .\security.evtx | Where {$_.message -Like "*member*added*"}       			// to find event id for member added id 4728 is 'A member was added to security-enabled global group.'
+
+> Get-WinEvent -Path .\security.evtx | Where {$_.id -eq 4728} | Select-Object -Property *
+
+
+
+
