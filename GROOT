@@ -5,7 +5,7 @@ Groot 1. What is the last five alphanumeric characters of the MD5 hash of this s
 
 Groot 2. The password for groot3 is the word that is made up from the letters in the range of 1,481,110 to 1,481,117 within the file on the desktop.
 
-> (Get-Content .\elements.txt)[1481110..14811117] -Join ""
+> (Get-Content .\elements.txt)[1481110..1481117] -Join ""
 
 Groot 3. The password for groot4 is the number of times the word “beetle” is listed in the file on the desktop.
 
